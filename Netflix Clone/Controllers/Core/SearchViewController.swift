@@ -111,9 +111,7 @@ extension SearchViewController: UISearchResultsUpdating {
         let resultController = searchController.searchResultsController as? SearchresultViewController else { return }
         resultController.delegate = self
         APICaller.shared.search(with: query) { result in
-            
             switch result {
-                
             case .success(let titles):
                 resultController.titles = titles
                 DispatchQueue.main.async {
@@ -124,8 +122,6 @@ extension SearchViewController: UISearchResultsUpdating {
                 break
             }
         }
-                
-                
     }
 }
 
