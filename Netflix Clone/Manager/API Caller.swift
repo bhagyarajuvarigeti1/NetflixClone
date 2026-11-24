@@ -20,7 +20,7 @@ class APICaller {
     
     private init() { }
     private var searchMoviesTask : URLSessionDataTask?
-    
+    // Legacy API you don't control
     func fetchTrendingMovies(completion: @escaping(Result<[Movie], Error>) -> Void) {
         guard let url = URL(string: "\(Constants.baseUrl)/3/trending/all/day?api_key=\(Constants.API_KEY)") else { return }
         let task      = URLSession.shared.dataTask(with: url) { data, response, error in
@@ -45,6 +45,21 @@ class APICaller {
         
         task.resume()
     }
+    
+    // Modern async wrapper
+    func fetchTrendingMovies() async throws -> [Movie] {
+        try await withCheckedThrowingContinuation(){ continution in
+           fetchTrendingMovies { result in
+               switch result {
+               case .success(let data):
+                   continution.resume(returning: data)
+               case .failure(let error):
+                   continution.resume(throwing: error)
+                   return
+               }
+           }
+        }
+    }
 
      func fetchTrendingTvs(completion: @escaping (Result<[Movie], Error>) -> Void) {
          guard let url = URL(string: "\(Constants.baseUrl)/3/trending/tv/day?api_key=\(Constants.API_KEY)") else {return}
@@ -66,6 +81,14 @@ class APICaller {
          
          task.resume()
      }
+    
+    func fetchTrendingTvs() async throws -> [Movie] {
+        try await withCheckedThrowingContinuation { continution in
+            fetchTrendingTvs { result in
+                continution.resume(with: result)
+            }
+        }
+    }
      
      
      func fetchUpcomingMovies(completion: @escaping (Result<[Movie], Error>) -> Void) {
