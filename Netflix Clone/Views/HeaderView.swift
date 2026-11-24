@@ -48,15 +48,25 @@ class HeaderView: UIView {
     }
     
     private func configureHeadPoster() {
-        APICaller.shared.fetchTrendingMovies { result in
-            switch result {
-            case .success(let titles):
-                guard let movie = titles.randomElement() else { return }
+        Task {
+            do {
+                let result = try await APICaller.shared.fetchTrendingMovies()
+                guard let movie = result.randomElement() else { return }
                 self.cofigure(with: movie.posterPath ?? "")
-            case .failure(_):
-                print("error")
+            }
+            catch {
+                print("error\(error)")
             }
         }
+//        APICaller.shared.fetchTrendingMovies { result in
+//            switch result {
+//            case .success(let titles):
+//                guard let movie = titles.randomElement() else { return }
+//                self.cofigure(with: movie.posterPath ?? "")
+//            case .failure(_):
+//                print("error")
+//            }
+//        }
     }
     
     private func configureButtons() {

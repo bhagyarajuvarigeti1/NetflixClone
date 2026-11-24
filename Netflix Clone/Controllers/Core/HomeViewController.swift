@@ -65,21 +65,21 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         cell.deleget = self
         switch indexPath.section {
         case sections.TrendingMovies.rawValue:
-            APICaller.shared.fetchTrendingMovies { result in
-                switch result {
-                case .success(let titles):
+            Task {
+                do  {
+                  let titles = try await APICaller.shared.fetchTrendingMovies()
                     cell.configure(with: titles)
-                case .failure(let err):
-                    print(err.localizedDescription)
+                } catch {
+                    print(error.localizedDescription)
                 }
             }
         case sections.TrendingTv.rawValue:
-            APICaller.shared.fetchTrendingTvs { result in
-                switch result {
-                case .success(let titles):
-                    cell.configure(with: titles)
-                case .failure(let err):
-                    print(err.localizedDescription)
+            Task {
+                do {
+                    let movies = try await APICaller.shared.fetchTrendingTvs()
+                    cell.configure(with: movies)
+                } catch {
+                    print(error.localizedDescription)
                 }
             }
         case sections.Popular.rawValue:
