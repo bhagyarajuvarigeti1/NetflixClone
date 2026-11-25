@@ -36,6 +36,12 @@ class TabBarViewController: UITabBarController {
         
         UITabBar.appearance().tintColor = .systemGreen
         
+        if #available(iOS 27.0, *) {
+            sidebar.preferredPlacement = .sidebar
+        } else {
+            // Fallback on earlier versions
+        }
+        
         setViewControllers([homeNC, topSearchNC, upcomingNC, downloadNC], animated: true)
     }
 }
