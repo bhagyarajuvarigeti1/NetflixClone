@@ -50,7 +50,7 @@ class VideoPreviewViewController: UIViewController {
         webView.translatesAutoresizingMaskIntoConstraints = false
         let padding: CGFloat = 20
         NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: padding),
+            webView.topAnchor.constraint(equalTo: view.topAnchor, constant: padding),
             webView.leadingAnchor.constraint(equalTo:  view.leadingAnchor, constant: padding),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant:  -padding),
             webView.heightAnchor.constraint(equalToConstant: 250),

@@ -24,8 +24,13 @@ class CollectionViewTableViewCell: UITableViewCell {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: 140, height: 200)
+//        layout.sectionInsetReference = .fromSafeArea
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(TitleCollectionViewCell.self, forCellWithReuseIdentifier: TitleCollectionViewCell.identifier)
+//        collectionView.contentInsetAdjustmentBehavior = .automatic
+//        collectionView.alwaysBounceVertical = false
+//        collectionView.showsHorizontalScrollIndicator = false
         return collectionView
     }()
     
@@ -45,12 +50,20 @@ class CollectionViewTableViewCell: UITableViewCell {
         collectionView.register(TitleCollectionViewCell.self, forCellWithReuseIdentifier: TitleCollectionViewCell.identifier)
         collectionView.dataSource = self
         collectionView.delegate = self
+        // Pin leading/trailing to `self` (the full cell width) instead of `contentView`
+        // so landscape safe-area insets on contentView don't clip the right/left edges
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor)
+        ])
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        collectionView.frame = contentView.bounds
-    }
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        collectionView.frame = contentView.bounds
+//    }
     
     func configure(with titles: [Movie]) {
         self.titles = titles

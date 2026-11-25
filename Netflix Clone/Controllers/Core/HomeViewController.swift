@@ -25,7 +25,15 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .secondarySystemBackground
         configureNavBar()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
         
+//        let isLandscape = size.width > size.height
+        coordinator.animate(alongsideTransition: { [weak self] _ in
+            self?.configureNavBar()
+        })
     }
     
     private func configureNavBar() {
@@ -44,7 +52,7 @@ class HomeViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.frame = CGRect(x: 10, y: 5, width: view.bounds.width - 20, height: view.bounds.height)
-        
+        tableView.isScrollEnabled = true
         tableView.tableHeaderView = HeaderView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height/2))
     }
 }
@@ -114,7 +122,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         default:
             return UITableViewCell()
         }
-        cell.backgroundColor = .red
+//        cell.backgroundColor = .red
         return cell
         
     }
